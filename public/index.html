@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>音読原稿入力</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f7fafd; padding: 30px; }
+    #container { max-width: 480px; margin: 0 auto; }
+    #scriptInput {
+      width: 100%;
+      font-size: 1.1em;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #bbb;
+      box-sizing: border-box;
+    }
+    #goBtn {
+      margin-top: 1em;
+      padding: 0.7em 2em;
+      border: none;
+      border-radius: 8px;
+      background: #4a90e2;
+      color: #fff;
+      font-size: 1.1em;
+      cursor: pointer;
+    }
+    #goBtn:disabled {
+      background: #bbb;
+      color: #666;
+      cursor: not-allowed;
+    }
+    .hint {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #666;
+      line-height: 1.5;
+    }
+    .row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .subBtn {
+      padding: 0.55em 1em;
+      border: 1px solid #c7d3e0;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.95em;
+    }
+    .subBtn:hover { background: #f0f6ff; }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+
+    <h2>音読原稿を入力してください</h2>
+
+    <textarea id="scriptInput" rows="6" placeholder="ここに音読する英文を入力してください（例：Hello. My name is ...）"></textarea>
+
+    <div class="row">
+      <button id="goBtn" disabled>録音・評価へ進む</button>
+      <button id="clearBtn" class="subBtn" type="button">クリア</button>
+      <button id="sampleBtn" class="subBtn" type="button">例文を入れる</button>
+    </div>
+
+    <div class="hint">
+      入力した原稿はこの端末のブラウザに保存され、次の画面で読み込みます。<br>
+      個人情報は入力しないでください。
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById("scriptInput");
+    const goBtn = document.getElementById("goBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const sampleBtn = document.getElementById("sampleBtn");
+
+    const STORAGE_KEY = "refText";
+    const SAMPLE_TEXT = "Hello. My name is Takumu. Let's read English sentences together.";
+
+    // 既存保存があれば復元
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) input.value = saved;
+
+    // 入力状態でボタン制御
+    function syncUI() {
+      const text = input.value.trim();
+      goBtn.disabled = (text.length === 0);
+    }
+    syncUI();
+
+    input.addEventListener("input", () => {
+      // 入力を随時保存（事故防止）
+      localStorage.setItem(STORAGE_KEY, input.value);
+      syncUI();
+    });
+
+    goBtn.addEventListener("click", () => {
+      const text = input.value.trim();
+      if (!text) return;
+
+      // Reading.js が読むキーに合わせて保存
+      localStorage.setItem(STORAGE_KEY, text);
+
+      // public/ 配下想定
+      location.href = "Reading.html";
+    });
+
+    clearBtn.addEventListener("click", () => {
+      input.value = "";
+      localStorage.removeItem(STORAGE_KEY);
+      syncUI();
+      input.focus();
+    });
+
+    sampleBtn.addEventListener("click", () => {
+      input.value = SAMPLE_TEXT;
+      localStorage.setItem(STORAGE_KEY, SAMPLE_TEXT);
+      syncUI();
+      input.focus();
+    });
+  </script>
+</body>
+</html>
