@@ -61,3 +61,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Acknowledgments
 
 Created for English language learners and educators who want a simple, self-hosted solution for pronunciation assessment.
+
+---
+
+**[日本語版READMEはこちら (Japanese README)](README_JP.md)**
