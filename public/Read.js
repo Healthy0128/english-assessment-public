@@ -1,5 +1,5 @@
 // --- 初期設定 ---
-let refText = localStorage.getItem("refText") || "Hello. My name is Takumu. Let's read English sentences together.";
+let refText = localStorage.getItem("refText") || "Hello. My name is Alex. Let's read English sentences together.";
 const scriptDiv = document.getElementById("script");
 const resultDiv = document.getElementById("resultSummary");
 const ttsBtn = document.getElementById("ttsBtn");
